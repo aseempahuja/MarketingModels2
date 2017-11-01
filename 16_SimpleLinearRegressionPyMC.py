@@ -36,9 +36,16 @@ with pm.Model() as model:
     #define likelihhood
     yl = pm.Normal('yl', mu=mu, tau=tau, observed=zy)
     #Generate the MCMC chain
-    start = pm.find_MAP()
-    step = pm.Metropolis()
-    trace = pm.sample(10000, step, start, progressbar=False)
+    #you need to knwo the procedure of creating MCMC chain
+    start1 = pm.find_MAP()
+    step1 = pm.Metropolis()
+    #you need to define init param which can be advi, advi_map, map, nuts
+    # def sample(draws=500, step=None, init='auto', n_init=200000, start=None,
+    #            trace=None, chain=0, njobs=1, tune=500, nuts_kwargs=None,
+    #            step_kwargs=None, progressbar=True, model=None, random_seed=-1,
+    #            live_plot=False, discard_tuned_samples=True, live_plot_kwargs=None,
+    #            **kwargs):
+    trace = pm.sample(10000, step=step1,init='auto', start=start1, progressbar=False)
 #Examine the results
 burnin=5000
 thin=10
@@ -59,8 +66,8 @@ sigma = z_sigma * y_sd
 
 
 ## Print summary for each trace
-# pm.summary(trace[burnin::thin])
-# pm.summary(trace)
+pm.summary(trace[burnin::thin])
+pm.summary(trace)
 
 # Posterior prediction:
 # Specify x values for which predicted y's are needed:
@@ -85,7 +92,7 @@ for chain_idx in range(post_samp_size):
                            scale = np.repeat([sigma[chain_idx]], [len(x_post_pred)]), size=len(x_post_pred))
 
 for x_idx in range(len(x_post_pred)):
-    y_HDI_lim[x_idx] = hpd1(y_post_pred[x_idx])
+    y_HDI_lim[x_idx] = pm.hpd(y_post_pred[x_idx])
 
 
 ## Display believable beta0 and b1 values
@@ -105,11 +112,14 @@ plt.savefig('Figure_16.4.png')
 # Display the posterior of the b1:
 plt.figure(figsize=(8, 5))
 plt.subplot(1, 2, 1)
-plot_post(z1, xlab='Standardized slope',
-          comp_val=0.0, bins=30, show_mode=False)
+
+# def plot_post(sample, alpha=0.05, show_mode=True, kde_plot=True, bins=50,
+#     ROPE=None, comp_val=None, roundto=2)
+
+
+plot_post(z1,comp_val=0.0, bins=30, show_mode=False)
 plt.subplot(1, 2, 2)
-plot_post(b1, xlab='Slope (pounds per inch)',
-          comp_val=0.0, bins=30, show_mode=False)
+plot_post(b1, comp_val=0.0, bins=30, show_mode=False)
 plt.tight_layout()
 plt.show()
 
