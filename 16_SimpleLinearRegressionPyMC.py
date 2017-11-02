@@ -87,6 +87,8 @@ y_HDI_lim = np.zeros((len(x_post_pred), 2))
 #     #x-distrf?
 #     #beta 1 and beta 2 diest is what
 #     #should check th e output here
+#so this works as follows, it will predict value of y in each iteration of the MCMC sampkeing
+#so if tehre are 20 loops, it will give 20 possible sample values of Y
 for chain_idx in range(post_samp_size):
     y_post_pred[:,chain_idx] = norm.rvs(loc=b0[chain_idx] + b1[chain_idx] * x_post_pred ,
                            scale = np.repeat([sigma[chain_idx]], [len(x_post_pred)]), size=len(x_post_pred))
@@ -122,66 +124,3 @@ plt.subplot(1, 2, 2)
 plot_post(b1, comp_val=0.0, bins=30, show_mode=False)
 plt.tight_layout()
 plt.show()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
