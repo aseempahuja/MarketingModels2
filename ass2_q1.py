@@ -20,8 +20,8 @@ data = pd.read_csv('clean_data2.csv', sep='\t')
 predictedName = "choice"
 predictorNames = ["cargo3","engElec","engHyb","p35","p40","s7","s8","cp_d"]
 nData = len(data)
-y = data[predictedName].head(100)
-x = data[predictorNames].head(100)
+y = data[predictedName]
+x = data[predictorNames]
 n_predictors = len(x.columns)
 
 # THE MODEL
